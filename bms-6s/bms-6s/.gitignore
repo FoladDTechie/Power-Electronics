@@ -1,0 +1,3 @@
+sim/*.txt
+!sim/results.txt
+scripts/__pycache__/

@@ -1,0 +1,29 @@
+* Variant B power stage, open loop
+.include models.lib
+.param vin=4.2 fsw=1.2meg lval=3.76e-06
+.param per={1/fsw} ton={0.23636*per}
+VB VBAT_P 0 {vin}
+VIL VBAT_P LA 0
+L2 LA LB {lval}
+RDCR LB SW 0.040
+S1 SW 0 G 0 SWMT
+VG G 0 PULSE(0 1 0 1n 1n {ton} {per})
+DD5 SW OUT SS34
+C12 OUT CX 35u
+RESR CX 0 3m
+RL OUT 0 5
+.ic v(OUT)=5
+.control
+set wr_singlescale
+set wr_vecnames
+tran 10n 1.5m 0 10n uic
+meas tran vout AVG v(OUT) FROM=1.2m TO=1.5m
+meas tran vpp PP v(OUT) FROM=1.2m TO=1.5m
+meas tran ipp PP i(VIL) FROM=1.2m TO=1.5m
+meas tran ipk MAX i(VIL) FROM=1.2m TO=1.5m
+meas tran iin AVG i(VIL) FROM=1.2m TO=1.5m
+linearize v(OUT) i(VIL)
+wrdata boost_4.2V.txt v(OUT) i(VIL)
+quit
+.endc
+.end

@@ -1,0 +1,29 @@
+* Variant B: SENSE_EN pulse, settling of ADC_DIV, Q1 VGS, supply current.
+.param rbyp=1T r2val=10k vin_v=30
+.include scaler.inc
+VIN VIN 0 {vin_v}
+* GPIO: low until 2 ms, high (3.3 V, VOH typ) for 20 ms, then low
+VEN SENSE_EN 0 PWL(0 0 2m 0 2.001m 3.3 22m 3.3 22.001m 0)
+.control
+set wr_singlescale
+set wr_vecnames
+foreach v 4.2 12 30
+  echo "vin_case = $v"
+  alterparam vin_v=$v
+  reset
+  tran 2u 40m uic
+  let vgs = v(Q1_G) - v(VIN)
+  let ivin = -i(VIN)
+  meas tran vfinal FIND v(adc_div) AT=21.9m
+  let tol = 0.2e-3
+  let err = abs(v(adc_div) - vfinal)
+  meas tran t_settle WHEN err=0.2e-3 FALL=LAST FROM=2m TO=21.9m
+  meas tran vgs_min MIN vgs FROM=2m TO=22m
+  meas tran i_on AVG ivin FROM=15m TO=21m
+  meas tran i_off AVG ivin FROM=35m TO=39m
+  meas tran v_off FIND v(adc_div) AT=39m
+  wrdata switched_$v v(adc_div) vgs ivin v(SENSE_EN)
+end
+quit
+.endc
+.end

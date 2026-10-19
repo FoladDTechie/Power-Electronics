@@ -1,0 +1,47 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * short circuit at pack+/pack-, dsg switched off at 50 us. node 0 = vss (b-)
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+Operating point simulation skipped by 'uic',
+  now using transient initial conditions.
+
+No. of Data Rows : 20114
+i_before            =  6.288832e+01
+vds_pk              =  2.329697e+01 at=  1.043500e-04
+pq1_pk              =  5.166112e+02 at=  9.391000e-05
+eq1                 =  5.90026e-03 from=  5.00000e-05 to=  4.00000e-04
+t_off               =  1.043564e-04
+vpack_min           =  -1.165788e+00 at=  1.038900e-04
+ngspice-44.2 done
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory

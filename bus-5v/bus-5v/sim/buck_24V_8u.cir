@@ -1,0 +1,30 @@
+* Variant A power stage, open loop, ideal switches with datasheet RDS(on) max
+.include models.lib
+.param vin=24.0 fsw=340k lval=8e-06
+.param per={1/fsw} ton={0.22321*per}
+VIN VIN_A_P 0 {vin}
+VG G 0 PULSE(0 1 0 1n 1n {ton} {per})
+VGN GN 0 PULSE(1 0 0 1n 1n {ton} {per})
+SHS VIN_A_P SW G 0 SWHS
+SLS SW 0 GN 0 SWLS
+DB 0 SW DBODY
+VIL SW SWX 0
+L1 SWX LX {lval}
+RDCR LX OUT 0.0298
+C7 OUT CX 70u
+RESR CX 0 3m
+RL OUT 0 2
+.ic v(OUT)=5
+.control
+set wr_singlescale
+set wr_vecnames
+tran 20n 3m 0 20n uic
+meas tran vout AVG v(OUT) FROM=2.5m TO=3m
+meas tran vpp PP v(OUT) FROM=2.5m TO=3m
+meas tran ipp PP i(VIL) FROM=2.5m TO=3m
+meas tran ipk MAX i(VIL) FROM=2.5m TO=3m
+linearize v(OUT) i(VIL)
+wrdata buck_24V_8u.txt v(OUT) i(VIL)
+quit
+.endc
+.end

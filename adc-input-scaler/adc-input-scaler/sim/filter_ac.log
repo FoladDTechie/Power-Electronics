@@ -1,0 +1,14 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * small-signal response vin -> adc_div (variant a)
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 251
+g_dc                =  -2.644455e+01
+f3db                =  1.667041e+02
+ngspice-44.2 done

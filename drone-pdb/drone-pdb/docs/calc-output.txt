@@ -1,0 +1,100 @@
+
+## Main current path
+- XT60: 30 A continuous, 60 A burst, contact 0.55 mOhm -> design target 30 A / 60 A
+- 2 x IPT012N08N5 at 30 A (continuous): 0.54 W at RDS(on) max 25 C, 0.92 W with x1.7 hot [ASSUMPTION]; per FET 0.46 W -> +18 K at RthJA 40 K/W (6 cm2 copper)
+- 2 x IPT012N08N5 at 60 A (burst): 2.16 W at RDS(on) max 25 C, 3.67 W with x1.7 hot [ASSUMPTION]; per FET 1.84 W -> +73 K at RthJA 40 K/W (6 cm2 copper)
+- Shunt 0.5 mOhm at 30 A: 0.45 W vs 1.0 W rating (continuous limit from P: 44.7 A)
+- Shunt 0.5 mOhm at 60 A: 1.80 W vs 1.0 W rating (continuous limit from P: 44.7 A)
+- Board path without copper: 2.20 mOhm -> 66 mV drop at 30 A (PCB copper not included)
+
+## INA226 scaling
+- Shunt full scale 81.92 mV / 0.5 mOhm = 163.8 A; shunt LSB 5 mA
+- Current_LSB = 2 mA -> CAL = 0.00512 / (2 mA x 0.5 mOhm) = 5120 (0x1400); register limit 65.5 A; power LSB 50 mW
+- Offset 10 uV max = 20 mA; gain 0.1 % + shunt 1 % + TCR 350 ppm/K (x 50 K self-heating = 1.75 %) [ASSUMPTION 50 K]
+- At 30 A: worst case about +-0.88 A
+- INA226 is powered from the flight controller's 3.3 V: SDA/SCL VIH = 0.7 x VS, so a 5 V supply would not accept 3.3 V logic
+
+## Anti-spark: gate supply
+- VBAT 12.0 V: zener current up to 0.03 mA; DISARM short draws 0.55 mA, 7 mW in R_SUP
+- VBAT 16.8 V: zener current up to 0.25 mA; DISARM short draws 0.76 mA, 13 mW in R_SUP
+- VBAT 25.2 V: zener current up to 0.63 mA; DISARM short draws 1.15 mA, 29 mW in R_SUP
+- Gate node <= 12.7 V (BZX84-C12 max at 5 mA) vs VGS max 20 V. [ASSUMPTION] at 0.1-0.6 mA the zener sits a little below its 5 mA value
+- Disarmed but plugged in: 1.15 mA at 25.2 V = 27 mAh/day
+
+## Anti-spark: precharge
+- R_PRE = 2S2P of 10 Ohm CRGP2512 = 10 Ohm; C_LOAD 2200 uF [ASSUMPTION] -> tau 22 ms, 99 % at 101 ms
+- At 25.2 V: peak 2.52 A, peak power 63.5 W (15.9 W per resistor), energy 0.70 J (0.175 J per resistor)
+- CRGP2512 has a pulse graph only (2 W, 500 V); 0.18 J in ~22 ms is NOT checked against it
+- ESC idle 0.2 A [ASSUMPTION] leaves 2.0 V across R_PRE when the main FETs close
+- Without precharge the plug-in current is limited only by lead and capacitor impedance (see sim/results.txt)
+
+## Anti-spark: main FET delay
+- nominal : tau 1.04 s, VGS reaches VTH 3.0 V at 298 ms, 10 V at 1.86 s
+- earliest: tau 0.92 s, VGS reaches VTH 2.2 V at 174 ms, 10 V at 1.42 s
+- latest  : tau 1.15 s, VGS reaches VTH 3.8 V at 465 ms, 10 V at 2.41 s
+- Precharge 99 % (101 ms) comes before the earliest VTH crossing
+- The BECs must not start before the latest VTH crossing, or their load lands on R_PRE: see the EN delay below (C_EN -10 % included there)
+- Turn-off on DISARM: 1 uF through 100 Ohm + 1N4148W -> tau 0.1 ms; peak 127 mA (1N4148W IFSM 500 mA)
+- Disarming under load would run the FETs through their linear region for ~0.1 ms: only disarm with motors stopped
+
+## Transient clamp vs ratings
+- SMCJ26A: VR 26.0 V > 25.2 V; VBR 28.9-31.9 V at 1 mA; VC 42.1 V at 35.7 A
+    TPS54360 VIN abs max          65.0 V  OK
+    IPT012N08N5 VDS               80.0 V  OK
+    BUK7M42-60E VDS               60.0 V  OK
+    INA226 IN+/IN-/VBUS abs max   40.0 V  EXCEEDED at full Ipp
+    Panasonic FR 50 V bulk        50.0 V  OK
+    MLCC 50 V                     50.0 V  OK
+- Littelfuse 466 is a 32 V fuse: OK at 25.2 V, but its breaking rating does not cover a fault during a clamp event
+
+## BEC enable (TPS54360 EN): UVLO and start-up delay
+- Target start 10.0 V / stop 9.0 V -> RUVLO1 294k, RUVLO2 38.3k
+- Start 10.06 V (range 9.19-10.93 V), stop 9.06 V (range 7.87-10.28 V); I1 is typical only
+- VIN 12.0 V: EN settles at 1.42 V (abs max 8.4 V), enables after 2483 ms (2235 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+- VIN 14.8 V: EN settles at 1.75 V (abs max 8.4 V), enables after 1559 ms (1403 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+- VIN 16.8 V: EN settles at 1.98 V (abs max 8.4 V), enables after 1253 ms (1128 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+- VIN 22.2 V: EN settles at 2.60 V (abs max 8.4 V), enables after 831 ms (748 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+- VIN 25.2 V: EN settles at 2.95 V (abs max 8.4 V), enables after 702 ms (632 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+- VIN 42.1 V: EN settles at 4.89 V (abs max 8.4 V), enables after 378 ms (340 ms with C_EN -10 %) (C_EN 2 x 22 uF x 0.9 [ASSUMPTION])
+
+## BEC power stages (TPS54360, f = 600 kHz)
+- RT 162k: Eq. 7 gives 597 kHz; datasheet example 162k = 600 kHz
+
+### 5V BEC: 5.0 V / 2.0 A
+- FB 53.6k / 10.2k -> 5.004 V (4.85-5.16 V with VREF +-1 % and 1 % resistors)
+- Eq. 28 L(min) at KIND 0.3, VIN 25.2 V: 11.1 uH -> 10 uH XAL6060
+    VIN 12.0 V: D 0.42, on-time 694 ns, ripple 0.49 A (0.61 A at L -20 %), peak 2.30 A; diode avg 1.17 A -> <= 0.87 W (VF 0.75 V bound)
+    VIN 16.8 V: D 0.30, on-time 496 ns, ripple 0.59 A (0.73 A at L -20 %), peak 2.37 A; diode avg 1.40 A -> <= 1.05 W (VF 0.75 V bound)
+    VIN 25.2 V: D 0.20, on-time 331 ns, ripple 0.67 A (0.83 A at L -20 %), peak 2.42 A; diode avg 1.60 A -> <= 1.20 W (VF 0.75 V bound)
+- On-time at the TVS clamp 42.1 V: 198 ns vs min 135 ns typ
+- Inductor Isat 7.6 A (30 % drop) vs current limit 4.5-6.8 A; DCR loss 119 mW
+- Cout 2 x 22 uF -> 30.8 uF effective [ASSUMPTION]; ripple ~5.5 mV p-p at 25.2 V
+- Eq. 32 for a 1.00 A step and 4 % dip: Cout >= 16.7 uF
+- Compensation (Eq. 44-51): fp 2067 Hz, fz 3445 kHz, fco 24.9 kHz; R4 7.17k -> 7.15k, C5 10.8 nF, C8 74 pF
+- Input current at full load: 0.95 A at 12.0 V, 0.45 A at 25.2 V [ASSUMPTION eta 0.88]; 466 3 A fuse derated to 1.8 A at 70 C
+
+### 12V BEC: 12.0 V / 1.5 A
+- FB 140.0k / 10.0k -> 12.000 V (11.64-12.36 V with VREF +-1 % and 1 % resistors)
+- Eq. 28 L(min) at KIND 0.3, VIN 25.2 V: 23.3 uH -> 22 uH XAL6060
+    VIN 12.0 V: below regulation, output follows VIN (dropout)
+    VIN 16.8 V: D 0.71, on-time 1190 ns, ripple 0.26 A (0.32 A at L -20 %), peak 1.66 A; diode avg 0.43 A -> <= 0.32 W (VF 0.75 V bound)
+    VIN 25.2 V: D 0.48, on-time 794 ns, ripple 0.48 A (0.60 A at L -20 %), peak 1.80 A; diode avg 0.79 A -> <= 0.59 W (VF 0.75 V bound)
+- On-time at the TVS clamp 42.1 V: 475 ns vs min 135 ns typ
+- Inductor Isat 5.6 A (30 % drop) vs current limit 4.5-6.8 A; DCR loss 136 mW
+- Cout 3 x 10 uF -> 22.5 uF effective [ASSUMPTION]; ripple ~4.9 mV p-p at 25.2 V
+- Eq. 32 for a 0.75 A step and 4 % dip: Cout >= 5.2 uF
+- Compensation (Eq. 44-51): fp 884 Hz, fz 7074 kHz, fco 16.3 kHz; R4 8.22k -> 8.25k, C5 21.8 nF, C8 64 pF
+- Dropout: needs VIN >= ~12.38 V at 1.5 A [ASSUMPTION near-100 % duty, datasheet gives no max duty]; on 4S that is 3.09 V per cell
+- Input current at full load: 1.70 A at 12.0 V, 0.81 A at 25.2 V [ASSUMPTION eta 0.88]; 466 3 A fuse derated to 1.8 A at 70 C
+
+## Low-voltage alarm (MCP65R41, VREF 1.21 V)
+- 4S (JP1 open): alarm ON below 14.01 V (3.50 V/cell, worst case 13.36-14.67 V), OFF above 14.59 V (3.65 V/cell)
+    filter: 1 uF x 171k = 171 ms
+- 6S (JP1 closed): alarm ON below 21.06 V (3.51 V/cell, worst case 20.07-22.06 V), OFF above 21.93 V (3.65 V/cell)
+    filter: 1 uF x 114k = 114 ms
+- With the 5 V rail off and 25.2 V on the bus, VIN- input current = 12.4 uA vs 2 mA abs max input current
+- VREF load 1.2 uA vs +-500 uA; no capacitor on VREF (datasheet: > 2000 pF may oscillate)
+- Buzzer: 30 mA through 2N7002 (5.3 Ohm max at 4.5 V) -> 4.84 V across it (operating 4.0-7.0 V)
+
+## Quiescent drain
+- Armed, before BEC load, at 25.2 V: about 0.79 mA from dividers and gate supply, plus BEC no-load current (not computed)

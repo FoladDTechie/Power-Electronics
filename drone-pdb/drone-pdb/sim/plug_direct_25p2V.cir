@@ -1,0 +1,23 @@
+* Plug-in WITHOUT anti-spark: bus capacitance straight onto the battery
+.include models.lib
+VB BSRC 0 PWL(0 0 1u 25.2)
+RPACK BSRC BL 15m
+LLEAD BL BL2 150n
+VIB BL2 BAT_P 0
+RSH BAT_P BUS 0.5m
+C1 BUS CX 2200u
+RESR CX PGND 20m
+RESC BUS PGND 126
+* closed main switch (2 x 1.2 mOhm max in parallel)
+RQ PGND 0 0.6m
+.control
+set wr_singlescale
+set wr_vecnames
+tran 0.2u 5m 0 0.2u
+let ibat = i(VIB)
+meas tran ipk MAX ibat FROM=0 TO=5m
+linearize ibat
+wrdata plug_direct_25p2V.txt ibat
+quit
+.endc
+.end

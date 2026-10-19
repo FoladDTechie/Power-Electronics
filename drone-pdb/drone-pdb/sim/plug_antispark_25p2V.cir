@@ -1,0 +1,64 @@
+* Plug-in WITH the anti-spark circuit. Node 0 = BAT_N (battery negative)
+.include models.lib
+VB BSRC 0 PWL(0 0 1u 25.2)
+RPACK BSRC BL 15m
+LLEAD BL BL2 150n
+VIB BL2 BAT_P 0
+* R1: WSK2512 0.5 mOhm high-side shunt
+RSH BAT_P BUS 0.5m
+* bus capacitance and loads, all returning to PGND
+C1 BUS CX 2200u
+RESR CX PGND 20m
+RESC BUS PGND 126
+* BEC enable network (one BEC's divider; both are identical) and BEC load
+R1 BUS EN 294k
+R2 EN PGND 38.3k
+CEN EN PGND 39.6u
+BBEC BUS PGND I = 32/max(v(BUS,PGND),8) * 0.5*(1+tanh(40*(v(EN,PGND)-1.2)))
+* gate supply: R_SUP, zener to BAT_N
+RSUP BAT_P GSUP 22k
+DZ 0 GSUP BZX84C12
+* precharge switch Q3 + R_PRE (2S2P of 10 ohm = 10 ohm)
+RGP GSUP GP 10k
+CGP GP 0 0.6n
+VIPRE PGND PRE1 0
+RPRE PRE1 DPRE 10
+MQ3 DPRE GP 0 0 BUK7M42
+DQ3 0 DPRE DBODYP
+* main switch Q1 || Q2, gate delay R_GM / C_GM, fast discharge D + 100 ohm
+RGM GSUP GM 1meg
+CGM GM 0 1u
+CISS GM 0 26n
+DGM GM GX D1N4148W
+RGX GX GSUP 100
+VIM PGND DM 0
+MQ1 DM GM 0 0 IPT012X2
+DQ1 0 DM DBODYM
+.control
+set wr_singlescale
+set wr_vecnames
+tran 2u 3 0 20u
+let ibat = i(VIB)
+let vds = v(PGND)
+let vbus = v(BUS) - v(PGND)
+let ven = v(EN) - v(PGND)
+let ppre = i(VIPRE)*i(VIPRE)*10
+let pmain = v(PGND)*i(VIM)
+meas tran ipk MAX ibat FROM=0 TO=0.05
+meas tran ppre_pk MAX ppre FROM=0 TO=0.05
+meas tran epre INTEG ppre FROM=0 TO=3
+meas tran t_main WHEN i(VIM)=0.5 RISE=1
+meas tran vds_main FIND vds WHEN i(VIM)=0.5 RISE=1
+meas tran t_bec WHEN ven=1.2 RISE=1
+meas tran vgs_bec FIND v(GM) WHEN ven=1.2 RISE=1
+meas tran vds_bec FIND vds WHEN ven=1.2 RISE=1
+meas tran pmain_pk MAX pmain FROM=0 TO=3
+meas tran emain INTEG pmain FROM=0 TO=3
+meas tran vds_end FIND vds AT=2.99
+meas tran vgs_end FIND v(GM) AT=2.99
+meas tran ibat_end FIND ibat AT=2.99
+linearize ibat vds vbus ven v(GM)
+wrdata plug_antispark_25p2V.txt ibat vds vbus ven v(GM)
+quit
+.endc
+.end

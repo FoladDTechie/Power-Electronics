@@ -1,0 +1,48 @@
+== Window: ATTEN2 calibrated range 0..1600 mV, worst-case node limit 1550 mV at Vin = 30.0 V
+
+-- Top E24 pairs (Rtop+Rbot 150..300 k, worst case 1 %/100 ppm stays under limit):
+   Rtop      Rbot      Vnode@Vin_max   ratio 1/k
+    160.00k    8.200k     1462.5 mV      20.5122
+    180.00k    9.100k     1443.7 mV      20.7802
+    240.00k   12.000k     1428.6 mV      21.0000
+    220.00k   11.000k     1428.6 mV      21.0000
+    200.00k   10.000k     1428.6 mV      21.0000
+    150.00k    7.500k     1428.6 mV      21.0000
+
+-- Top E96 pairs (Rtop+Rbot 150..300 k, worst case 1 %/100 ppm stays under limit):
+   Rtop      Rbot      Vnode@Vin_max   ratio 1/k
+    215.00k   11.300k     1498.0 mV      20.0265
+    280.00k   14.700k     1496.4 mV      20.0476
+    200.00k   10.500k     1496.4 mV      20.0476
+    261.00k   13.700k     1496.2 mV      20.0511
+    169.00k    8.870k     1496.0 mV      20.0530
+    165.00k    8.660k     1496.0 mV      20.0531
+
+== Chosen: Rtop = 200 k, Rbot = 10 k, k = 0.047619 (Vin = 21.0000 x Vadc)
+   Vnode at Vin_max = 1428.6 mV; Vin that reaches 1600 mV = 33.60 V
+
+   Worst-case ratio error (resistors only):
+   case                               k_min      k_max     error
+   1 % tolerance, 25 C                0.046720  0.048534  -1.888 % / +1.922 %  (= -566 / +577 mV at 30.0 V)
+   1 % + 100 ppm/K over 0..70 C       0.046321  0.048952  -2.726 % / +2.799 %  (= -818 / +840 mV at 30.0 V)
+   0.1 % tolerance, 25 C              0.047528  0.047710  -0.190 % / +0.191 %  (= -57 / +57 mV at 30.0 V)
+   0.1 % + 25 ppm/K over 0..70 C      0.047427  0.047812  -0.404 % / +0.406 %  (= -121 / +122 mV at 30.0 V)
+
+== Thevenin source resistance seen by C1/ADC: 9.524 k
+   tau = 0.952 ms, -3 dB corner = 167.1 Hz
+   settle to 1/2 LSB of 10-bit: 7.62 tau = 7.26 ms
+   settle to 1/2 LSB of 12-bit: 9.01 tau = 8.58 ms
+   always-on divider drain at   4.2 V:    20.0 uA (0.175 Ah per year)
+   always-on divider drain at  12.0 V:    57.1 uA (0.501 Ah per year)
+   always-on divider drain at  24.0 V:   114.3 uA (1.001 Ah per year)
+   always-on divider drain at  30.0 V:   142.9 uA (1.251 Ah per year)
+
+== Leakage-induced offset at the ADC node (datasheet maxima, 25 C):
+   ESP32-S3 pin leakage 50 nA into Rth + 1k series: 0.526 mV -> 11.0 mV at Vin
+   BAT54S IR bound 2 uA (spec'd at VR=25 V, not at <=3.6 V): 19.0 mV -> 0.400 V at Vin  (upper bound, see README)
+
+== ESP32-S3 calibrated total error referred to Vin (x 1/k):
+   ATTEN0: +/-5 mV at pin -> +/-0.105 V at Vin
+   ATTEN1: +/-6 mV at pin -> +/-0.126 V at Vin
+   ATTEN2: +/-10 mV at pin -> +/-0.210 V at Vin
+   ATTEN3: +/-50 mV at pin -> +/-1.050 V at Vin

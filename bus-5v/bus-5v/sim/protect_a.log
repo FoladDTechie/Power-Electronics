@@ -1,0 +1,43 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * variant a input protection: dc sweep vin -24..+24 v into a 10 ohm load
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 960
+a_iin_at_m24        =  -2.410161e-11
+a_vout_at_m24       =  -2.396000e-10
+a_vdrop_at_9        =  2.268691e-02
+a_vdrop_at_24       =  5.654404e-02
+a_vgs_at_9          =  -8.977312e+00
+a_vgs_at_24         =  -1.190590e+01
+ngspice-44.2 done
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory

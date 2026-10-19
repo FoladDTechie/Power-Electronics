@@ -1,0 +1,59 @@
+# ngspice results: behavioural models (sim/models.lib), open-loop power stages
+
+[protect_a]
+a_iin_at_m24 = -2.41016e-11
+a_vout_at_m24 = -2.396e-10
+a_vdrop_at_9 = 0.0226869
+a_vdrop_at_24 = 0.056544
+a_vgs_at_9 = -8.97731
+a_vgs_at_24 = -11.9059
+
+[protect_b]
+b_iin_at_m42 = -4.20641e-12
+b_vdrop_at_3 = 0.024667
+b_vdrop_at_42 = 0.0322516
+b_iin_at_3 = 1.48767
+
+[buck_9V_10u]
+vout = 4.94106
+vpp = 0.00357872
+ipp = 0.628919
+ipk = 2.7843
+
+[buck_9V_8u]
+vout = 4.94104
+vpp = 0.00447367
+ipp = 0.786175
+ipk = 2.86253
+
+[buck_24V_10u]
+vout = 4.98858
+vpp = 0.00714823
+ipp = 1.21898
+ipk = 3.10606
+
+[buck_24V_8u]
+vout = 4.98856
+vpp = 0.00893554
+ipp = 1.52376
+ipk = 3.25973
+
+[boost_3.0V]
+vout = 4.99242
+vpp = 0.0347355
+ipp = 0.284022
+ipk = 2.09154
+iin = 1.94968
+duty = 0.486205
+pin = 5.84903
+eta_stage = 0.852255
+
+[boost_4.2V]
+vout = 4.99795
+vpp = 0.0351702
+ipp = 0.208097
+ipk = 1.41633
+iin = 1.31213
+duty = 0.236364
+pin = 5.51094
+eta_stage = 0.906544

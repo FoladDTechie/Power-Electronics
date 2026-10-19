@@ -1,0 +1,43 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * variant b power stage, open loop
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+Operating point simulation skipped by 'uic',
+  now using transient initial conditions.
+ Reference value :  4.55875e-04
+ Reference value :  8.96240e-04
+ Reference value :  1.39879e-03
+No. of Data Rows : 216346
+vout                =  4.992425e+00 from=  1.200000e-03 to=  1.500000e-03
+vpp                 =  3.473555e-02 from=  1.200000e-03 to=  1.500000e-03
+ipp                 =  2.840217e-01 from=  1.200000e-03 to=  1.500000e-03
+ipk                 =  2.091536e+00 at=  1.237907e-03
+iin                 =  1.949676e+00 from=  1.200000e-03 to=  1.500000e-03
+ngspice-44.2 done
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory

@@ -1,0 +1,30 @@
+* Variant A input protection: DC sweep VIN -24..+24 V into a 10 ohm load
+.include models.lib
+VIN VIN_A 0 0
+* F1 0466003: nominal cold resistance 0.020 ohm (Littelfuse 466 series)
+RF1 VIN_A VIN_A_F 0.020
+* Q1 SiS443DN: D G S B  (drain on the input side)
+MQ1 VIN_A_F Q1_G VIN_A_P VIN_A_P SIS443 W=1 L=1
+* D3 BZX84-C12: anode = Q1_G, cathode = VIN_A_P
+DD3 Q1_G VIN_A_P BZX84C12
+R3 Q1_G 0 100k
+* D1 SMAJ24A: anode = GND, cathode = VIN_A_P
+DD1 0 VIN_A_P SMAJ24A
+RLOAD VIN_A_P 0 10
+.control
+set wr_singlescale
+set wr_vecnames
+dc VIN -24 24 0.05
+let iin = -i(VIN)
+let vgs = v(Q1_G) - v(VIN_A_P)
+let vdrop = v(VIN_A) - v(VIN_A_P)
+meas dc a_iin_at_m24 FIND iin AT=-23.95
+meas dc a_vout_at_m24 FIND v(VIN_A_P) AT=-23.95
+meas dc a_vdrop_at_9 FIND vdrop AT=9
+meas dc a_vdrop_at_24 FIND vdrop AT=23.95
+meas dc a_vgs_at_9 FIND vgs AT=9
+meas dc a_vgs_at_24 FIND vgs AT=23.95
+wrdata protect_a.txt v(VIN_A_P) iin vgs
+quit
+.endc
+.end

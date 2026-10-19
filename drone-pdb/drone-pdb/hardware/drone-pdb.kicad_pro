@@ -1,0 +1,20 @@
+{
+  "board": {
+    "design_settings": {}
+  },
+  "meta": {
+    "filename": "drone-pdb.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "6f4345e4-9115-5c2c-972a-129b832411d5",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}

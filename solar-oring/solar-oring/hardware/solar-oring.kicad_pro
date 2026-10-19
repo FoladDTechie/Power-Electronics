@@ -1,0 +1,20 @@
+{
+  "board": {
+    "design_settings": {}
+  },
+  "meta": {
+    "filename": "solar-oring.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "da7591ea-7aa9-540b-ba7a-52c44193a37f",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}

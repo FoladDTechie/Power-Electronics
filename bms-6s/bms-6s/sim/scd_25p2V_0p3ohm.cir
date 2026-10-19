@@ -1,0 +1,51 @@
+* Short circuit at PACK+/PACK-, DSG switched off at 50 us. Node 0 = VSS (B-)
+.include models.lib
+VB BSRC 0 25.2
+RINT BSRC PACKP 50m
+* short-circuit loop [ASSUMPTION]
+LSC PACKP SC1 1u
+RSC SC1 PACKN 0.3
+* TVS D1 across the pack terminals
+DTVS PACKN PACKP SMCJ26A
+* CHG FET Q2: drain MID, source PACKN; gate held by D3 + R13 from the CHG pin (12 V) and R14 to PACKN
+VCHG CHGPIN 0 12
+RCHGPU CHGPIN CHGP2 5k
+DCHG CHGP2 CHGA D1N4148W
+RCHG CHGA GQ2 1k
+RGS2 GQ2 PACKN 100k
+MQ2 MID GQ2 PACKN PACKN IPT012
+CGS2 GQ2 PACKN 13n
+CGD2 GQ2 MID 0.5n
+DB2 PACKN MID DBODYM
+* DSG FET Q1: drain MID, source SNS; driven from the DSG pin through R11 100 ohm
+VDSG DSGX 0 PWL(0 12 50u 12 50.1u 0)
+RDRV DSGX DSGPIN 2.5k
+RG1 DSGPIN GQ1 100
+RGS1 GQ1 SNS 1meg
+VIQ1 MID MIDQ 0
+MQ1 MIDQ GQ1 SNS SNS IPT012
+CGS1 GQ1 SNS 13n
+CGD1 GQ1 MIDQ 0.5n
+DB1 SNS MIDQ DBODYM
+* sense resistor R1 1 mOhm
+RSNS SNS 0 1m
+.ic v(GQ1)=12 v(GQ2)=11
+.control
+set wr_singlescale
+set wr_vecnames
+tran 20n 400u 0 20n uic
+let isc = i(VIQ1)
+let vds = v(MIDQ) - v(SNS)
+let pq1 = vds*isc
+let vpack = v(PACKP) - v(PACKN)
+meas tran i_before FIND isc AT=49u
+meas tran vds_pk MAX vds FROM=50u TO=400u
+meas tran pq1_pk MAX pq1 FROM=50u TO=400u
+meas tran eq1 INTEG pq1 FROM=50u TO=400u
+meas tran t_off WHEN isc=1 FALL=1
+meas tran vpack_min MIN vpack FROM=50u TO=400u
+linearize isc vds v(GQ1) pq1
+wrdata scd_25p2V_0p3ohm.txt isc vds v(GQ1) pq1
+quit
+.endc
+.end

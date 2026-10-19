@@ -1,0 +1,17 @@
+# ngspice results: open-loop power stage, behavioural switches (sim/models.lib)
+
+[buck_18V]
+vbat = 4.1602
+ibat = 2.0001
+vpp = 0.0197439
+ipp = 0.802274
+ipk = 2.40181
+duty = 0.241531
+
+[buck_22V]
+vbat = 4.15974
+ibat = 1.99988
+vpp = 0.0209515
+ipp = 0.850669
+ipk = 2.42592
+duty = 0.195651

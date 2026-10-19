@@ -1,0 +1,29 @@
+* TPS54360 power stage, open loop
+.include models.lib
+.param vin=16.8 fsw=600k lval=17.6u
+.param per={1/fsw} ton={0.74232*per}
+VIN VIN 0 {vin}
+VG G 0 PULSE(0 1 0 1n 1n {ton} {per})
+SHS VIN SW G 0 SWHS
+DCATCH 0 SW SS36
+VIL SW SWX 0
+L1 SWX LX {lval}
+RDCR LX OUT 0.0606
+COUT OUT CX 22.5u
+RESR CX 0 1m
+RL OUT 0 8.0
+.ic v(OUT)=12.0
+.control
+set wr_singlescale
+set wr_vecnames
+tran 10n 2m 0 10n uic
+meas tran vout AVG v(OUT) FROM=1.7m TO=2m
+meas tran vpp PP v(OUT) FROM=1.7m TO=2m
+meas tran ipp PP i(VIL) FROM=1.7m TO=2m
+meas tran ipk MAX i(VIL) FROM=1.7m TO=2m
+meas tran iin AVG i(VIN) FROM=1.7m TO=2m
+linearize v(OUT) i(VIL)
+wrdata bec12V_16p8V.txt v(OUT) i(VIL)
+quit
+.endc
+.end

@@ -1,0 +1,28 @@
+* SPDX-License-Identifier: CERN-OHL-P-2.0
+* Behavioural models for the 6S BMS simulations. NOT vendor models.
+* Every parameter is fitted to one datasheet number (noted) or is an
+* assumption (noted).
+
+* IPT012N08N5 (Infineon v2.1), one FET: VTO = VGS(th) typ 3.0 V,
+* KP so RDS(on) = 1.2 mOhm max at VGS = 10 V: KP = 1/(0.0012*7) = 119 A/V^2
+.model IPT012 NMOS(LEVEL=1 VTO=3.0 KP=119 LAMBDA=0.001)
+* Capacitances are added as discrete parts in the decks: Cgs = Ciss typ 13 nF
+* (VDS = 40 V); Cgd = 0.5 nF is an ASSUMPTION (Crss not read).
+.model DBODYM D(IS=1e-8 N=1.2 RS=1m)
+
+* 2N7002 (NXP/Nexperia): VTO = VGS(th) typ 2.0 V; RDS(on) 5 Ohm max at 10 V
+*   KP = 1/(5*8) = 0.025 A/V^2
+.model N2N7002 NMOS(LEVEL=1 VTO=2.0 KP=0.025 LAMBDA=0.01)
+
+* BZX84-C15: VZ 13.8-15.6 V at 5 mA; model 14.7 V mid-range (assumption).
+.model BZX84C15 D(IS=1e-14 N=1 RS=30 BV=14.7 IBV=5m)
+
+* 1N4148W (Vishay 85748): VF 1.0 V max at 10 mA. Generic small-signal fit.
+.model D1N4148W D(IS=2.5n N=1.75 RS=0.6 BV=100)
+
+* SMCJ26A (Littelfuse): VBR 28.9 V min at 1 mA; RS so VC = 42.1 V at 35.7 A:
+*   (42.1 - 28.9) / 35.7 = 0.37 Ohm
+.model SMCJ26A D(IS=1e-12 N=1.5 RS=0.37 BV=28.9 IBV=1m)
+
+* BZX84-C18: VZ 16.8-19.1 V at 5 mA; model 17.9 V mid-range (assumption).
+.model BZX84C18 D(IS=1e-14 N=1 RS=30 BV=17.9 IBV=5m)

@@ -1,0 +1,92 @@
+
+Note: No compatibility mode selected!
+
+
+Circuit: * plug-in with the anti-spark circuit. node 0 = bat_n (battery negative)
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+Initial Transient Solution
+--------------------------
+
+Node                                   Voltage
+----                                   -------
+bsrc                                         0
+bl                                  3.6628e-34
+bl2                                 3.6628e-34
+bat_p                               3.6628e-34
+bus                                3.71852e-34
+cx                                 1.40396e-30
+pgnd                               1.40396e-30
+en                                 1.24219e-30
+gsup                               2.92046e-28
+gp                                 2.92046e-28
+pre1                               1.40396e-30
+dpre                               1.40507e-30
+gm                                 1.02524e-17
+gx                                -1.02524e-21
+dm                                 1.40396e-30
+llead#branch                      -2.44187e-32
+vim#branch                        -1.10335e-32
+vipre#branch                      -1.10389e-34
+vib#branch                        -2.44187e-32
+vb#branch                          2.44187e-32
+
+ Reference value :  5.46455e-01
+ Reference value :  1.09735e+00
+ Reference value :  1.71203e+00
+ Reference value :  2.34061e+00
+ Reference value :  2.82609e+00
+No. of Data Rows : 150029
+ipk                 =  2.519575e+00 at=  1.715193e-05
+ppre_pk             =  6.345190e+01 at=  1.715193e-05
+epre                =  8.31468e-01 from=  0.00000e+00 to=  3.00000e+00
+t_main              =  3.037779e-01
+vds_main            =  1.327822e+00
+t_bec               =  7.591493e-01
+vgs_bec             =  6.252823e+00
+vds_bec             =  1.077392e-03
+pmain_pk            =  7.042606e-01 at=  3.047750e-01
+emain               =  7.49579e-03 from=  0.00000e+00 to=  3.00000e+00
+vds_end             =  7.436425e-04
+vgs_end             =  1.131084e+01
+ibat_end            =  1.471520e+00
+ngspice-44.2 done
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory
+fopen("/proc/meminfo"): No such file or directory

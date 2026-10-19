@@ -1,0 +1,23 @@
+* Variant B input protection: DC sweep VBAT -4.2..+4.2 V into a 2 ohm load
+.include models.lib
+VB VBAT 0 0
+* F2 0466004: nominal cold resistance 0.014 ohm
+RF2 VBAT VBAT_F 0.014
+MQ2 VBAT_F Q2_G VBAT_P VBAT_P AON6411 W=1 L=1
+R9 Q2_G 0 100k
+DD4 0 VBAT_P SMAJ85A
+RLOAD VBAT_P 0 2
+.control
+set wr_singlescale
+set wr_vecnames
+dc VB -4.2 4.2 0.01
+let iin = -i(VB)
+let vdrop = v(VBAT) - v(VBAT_P)
+meas dc b_iin_at_m42 FIND iin AT=-4.19
+meas dc b_vdrop_at_3 FIND vdrop AT=3.0
+meas dc b_vdrop_at_42 FIND vdrop AT=4.19
+meas dc b_iin_at_3 FIND iin AT=3.0
+wrdata protect_b.txt v(VBAT_P) iin
+quit
+.endc
+.end

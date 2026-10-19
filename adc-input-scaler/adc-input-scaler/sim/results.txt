@@ -1,0 +1,39 @@
+# ngspice .meas results (behavioural models, see sim/models.lib)
+
+[dc_transfer]
+v_at30 = 1.428571e+00
+v_at33p6 = 1.600000e+00
+vin_at_3p5 = 7.976778e+01
+vpin_max = 3.548907e+00
+i3v3_at100 = 1.267809e-04
+open_vdiv_at30 = 3.550227e+00
+open_vpin_at30 = 3.550226e+00
+open_vpin_max = 3.576901e+00
+open_i3v3_at60 = 2.815175e-04
+
+[switched_tran]
+vin_case = 4.2
+vfinal = 1.999538e-01
+t_settle = 8.575750e-03
+vgs_min = -3.442346e+00
+i_on = 5.441812e-05
+i_off = 1.261810e-11
+v_off = 9.535596e-04
+vin_case = 12
+vfinal = 5.714011e-01
+t_settle = 9.578815e-03
+vgs_min = -9.835279e+00
+i_on = 1.554927e-04
+i_off = 3.601812e-11
+v_off = 9.537220e-04
+vin_case = 30
+vfinal = 1.428517e+00
+t_settle = 1.045311e-02
+vgs_min = -1.200941e+01
+i_on = 9.623387e-04
+i_off = 9.001815e-11
+v_off = 9.540974e-04
+
+[filter_ac]
+g_dc = -2.644455e+01
+f3db = 1.667041e+02

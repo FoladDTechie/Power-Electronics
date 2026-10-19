@@ -1,0 +1,34 @@
+* SPDX-License-Identifier: CERN-OHL-P-2.0
+* Behavioural models for the drone power board simulations. NOT vendor models.
+* Every parameter is fitted to one datasheet number (noted) or is an
+* assumption (noted). The README lists what these can and cannot show.
+
+* IPT012N08N5 x 2 in parallel (Infineon DS v2.1): VTO = VGS(th) typ 3.0 V
+* (range 2.2-3.8 V is handled in scripts/pdb_calc.py); KP so the pair gives
+* RDS(on) = 0.6 mOhm (two x 1.2 mOhm max) at VGS = 10 V:
+*   KP = 1 / (0.0006 * (10 - 3.0)) = 238 A/V^2
+.model IPT012X2 NMOS(LEVEL=1 VTO=3.0 KP=238 LAMBDA=0.001)
+* Gate capacitance stand-in: 2 x Ciss typ 13 nF (VDS = 40 V). Miller charge
+* is not modelled; it is small here because VDS is already low at turn-on.
+
+* BUK7M42-60E (Nexperia): VTO = VGS(th) typ 3.0 V; RDS(on) 42 mOhm max at 10 V
+*   KP = 1 / (0.042 * 7) = 3.4 A/V^2
+.model BUK7M42 NMOS(LEVEL=1 VTO=3.0 KP=3.4 LAMBDA=0.001)
+
+* Body-diode stand-ins (assumption, generic)
+.model DBODYM D(IS=1e-8 N=1.2 RS=1m)
+.model DBODYP D(IS=1e-10 N=1.2 RS=50m)
+
+* BZX84-C12: VZ 11.4-12.7 V at 5 mA; model 12.0 V (assumption, mid-range)
+.model BZX84C12 D(IS=1e-14 N=1 RS=20 BV=12.0 IBV=5m)
+
+* 1N4148W (Vishay 85748): VF 1.0 V max at 10 mA. Generic small-signal fit.
+.model D1N4148W D(IS=2.5n N=1.75 RS=0.6 BV=100)
+
+* SS36 (Vishay 88751): one datasheet point only, VF = 0.75 V max at 3 A.
+* N and RS are ASSUMED; IS fitted so the model gives 0.75 V at 3 A:
+*   0.6 V across the junction + 3 A x 0.05 ohm
+.model SS36 D(IS=1.5u N=1.6 RS=0.05 CJO=200p BV=60)
+
+* TPS54360 high-side switch: RDS(on) 190 mOhm max (VIN 12 V, BOOT-SW 6 V)
+.model SWHS SW(RON=0.190 ROFF=1e6 VT=0.5 VH=0.1)

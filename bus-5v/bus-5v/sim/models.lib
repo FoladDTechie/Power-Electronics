@@ -1,0 +1,33 @@
+* SPDX-License-Identifier: CERN-OHL-P-2.0
+* Behavioural models for the 5 V bus simulations. NOT vendor models.
+* Every parameter is fitted to one datasheet number (noted) or is an
+* assumption (noted). README section 8 lists what this can and cannot show.
+
+* SiS443DN (Vishay 63253 rev C): VTO = VGS(th) max -2.3 V (worst case);
+* KP so RDS(on) = 16 mOhm (datasheet max) at VGS = -4.5 V:
+*   KP = 1 / (0.016 * (4.5 - 2.3)) = 28.4 A/V^2
+.model SIS443 PMOS(LEVEL=1 VTO=-2.3 KP=28.4 LAMBDA=0.001)
+
+* AON6411 (AOS rev 1.1): VTO = VGS(th) max -1.3 V; RDS(on) = 3.6 mOhm max
+* at VGS = -2.5 V: KP = 1 / (0.0036 * (2.5 - 1.3)) = 231 A/V^2
+.model AON6411 PMOS(LEVEL=1 VTO=-1.3 KP=231 LAMBDA=0.001)
+
+* BZX84-C12: VZ 11.4-12.7 V at 5 mA; model 12.0 V (assumption, mid-range)
+.model BZX84C12 D(IS=1e-14 N=1 RS=20 BV=12.0 IBV=5m)
+
+* SMAJ24A: VBR 26.7-29.5 V at 1 mA; model VBR min (worst case for leakage)
+.model SMAJ24A D(IS=1e-12 N=1.5 RS=1.2 BV=26.7 IBV=1m)
+* SMAJ8.5A: VBR 9.44-10.4 V at 1 mA
+.model SMAJ85A D(IS=1e-12 N=1.5 RS=0.2 BV=9.44 IBV=1m)
+
+* SS34: one datasheet point only, VF = 0.50 V max at 3 A, 25 C.
+* IS and N are ASSUMED (generic 40 V 3 A Schottky); RS fitted so the model
+* gives 0.50 V at 3 A: 0.02585*ln(3/1e-5) = 0.326 V -> RS = 0.058 ohm
+.model SS34 D(IS=1e-5 N=1 RS=0.058 CJO=200p BV=40)
+
+* Ideal switch used for the converter power stages (open loop)
+.model SWHS SW(RON=0.160 ROFF=1e6 VT=0.5 VH=0.1)
+.model SWLS SW(RON=0.110 ROFF=1e6 VT=0.5 VH=0.1)
+.model SWMT SW(RON=0.150 ROFF=1e6 VT=0.5 VH=0.1)
+* Body-diode stand-in across the low-side switch (assumption)
+.model DBODY D(IS=1e-9 N=1.2 RS=0.05)

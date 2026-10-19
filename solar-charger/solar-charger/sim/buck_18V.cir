@@ -1,0 +1,33 @@
+* BQ24650 power stage, open loop
+.include models.lib
+.param vin=17.83 fsw=510k lval=8u
+.param per={1/fsw} ton={0.24153*per}
+VIN VIN 0 {vin}
+VG G 0 PULSE(0 1 0 1n 1n {ton} {per})
+VGN GN 0 PULSE(1 0 0 1n 1n {ton} {per})
+SHS VIN PH G 0 SWQ
+SLS PH 0 GN 0 SWQ
+DB 0 PH DBODY
+VIL PH PHX 0
+L1 PHX LX {lval}
+RDCR LX SRP 0.0298
+RSR SRP SRN 0.020
+C9 SRN CX 10u
+RESR CX 0 3m
+RF SRN BAT 0.014
+RL BAT 0 2.08
+.ic v(SRN)=4.16
+.control
+set wr_singlescale
+set wr_vecnames
+tran 10n 3m 0 10n uic
+meas tran vbat AVG v(BAT) FROM=2.5m TO=3m
+meas tran ibat AVG i(VIL) FROM=2.5m TO=3m
+meas tran vpp PP v(SRN) FROM=2.5m TO=3m
+meas tran ipp PP i(VIL) FROM=2.5m TO=3m
+meas tran ipk MAX i(VIL) FROM=2.5m TO=3m
+linearize v(SRN) i(VIL)
+wrdata buck_18V.txt v(SRN) i(VIL)
+quit
+.endc
+.end

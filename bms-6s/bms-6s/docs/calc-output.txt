@@ -1,0 +1,66 @@
+
+## Pack and groups
+- 6S: 15.0 / 22.2 / 25.2 V (2.5 / 3.7 / 4.2 V per cell)
+- BQ76930 6-cell map (datasheet Table 9-3): lower group cells on VC1-VC0, VC2-VC1, VC5-VC4 (VC2=VC3=VC4 shorted); upper group on VC6-VC5B, VC7-VC6, VC10-VC9 (VC7=VC8=VC9 shorted)
+- lower (VC5X-VSS): 3 cells = 7.5-12.6 V vs recommended 6.0-25.0 V per group: OK
+- upper (BAT-VC5X): 3 cells = 7.5-12.6 V vs recommended 6.0-25.0 V per group: OK
+- In-use cell differential 2.5-4.2 V vs recommended 2.0-5.0 V, abs max 9.0 V
+
+## Current path
+- 20 A (continuous): per FET 0.48 W at RDS(on) max, 0.82 W hot [ASSUMPTION x1.7] -> +33 K; shunt 0.40 W vs 1.0 W
+- 30 A (OCD threshold): per FET 1.08 W at RDS(on) max, 1.84 W hot [ASSUMPTION x1.7] -> +73 K; shunt 0.90 W vs 1.0 W
+- Path FET + FET + shunt = 3.4 mOhm -> 68 mV at 20 A (copper excluded)
+- SRN at 20 A discharge: 20 mV; at 5 A charge: -5 mV (recommended +-200 mV)
+- Coulomb counter: 8.44 uV LSB / 1 mOhm = 8.44 mA; range +-200 mV = +-200 A
+
+## Current protection (host writes PROTECT1/PROTECT2)
+  Code tables reconstructed from the datasheet range, step and its worked example (RSNS=1: SCD 0x03 = 111 mV, 0x04 = 133 mV; OCD 0x0A = 72 mV, 0x0B = 78 mV)
+- SCD: RSNS=0 code 4 = 66.6 mV -> 66.6 A nominal, 56.9-76.5 A with +-10 % scale, +-2.5 mV offset, 1 % shunt
+- OCD: RSNS=0 code 8 = 30.6 mV -> 30.6 A nominal, 24.8-36.5 A with +-10 % scale, +-2.5 mV offset, 1 % shunt
+- PROTECT1 = 0x0C (RSNS=0, SCD delay 100 us = code 1, threshold code 4)
+- PROTECT2 = 0x58 (OCD delay 320 ms = code 5, threshold code 8)
+  [CHECK] the datasheet example's text and its PROTECT2 value disagree by one threshold code; confirm the bit layout in the register map before writing
+
+## Voltage protection (host writes OV_TRIP/UV_TRIP/PROTECT3)
+- OV 4.25 V: ADC 11126 (0x2B76) -> OV_TRIP = 0xB7 -> actual 4.251 V (GAIN 382 uV/LSB, OFFSET 0 assumed; read ADCGAIN/ADCOFFSET)
+- UV 3.0 V: ADC 7853 (0x1EAD) -> UV_TRIP = 0xEA -> actual 2.995 V (GAIN 382 uV/LSB, OFFSET 0 assumed; read ADCGAIN/ADCOFFSET)
+- Datasheet check of the method: 4.30 V -> 0xBF and 2.5 V -> 0x99 as in its example: 0xbf, 0x99
+- PROTECT3 = 0x50: OV delay 2 s, UV delay 4 s (datasheet example value)
+- No hardware over-temperature or charge over-current: the host must do both from TS1 and CC
+
+## Cell input and supply filters
+- Rc 1000 Ohm (range 500-1000), Cc 1 uF differential (range 0.1-10 uF): tau 1.0 ms per side
+- BAT and VC5X power filters: Rf 100 Ohm, Cf 10 uF (typ values) -> tau 1.0 ms
+- Internal balancing through 2 x Rc: 1.85 mA at 3.7 V (2.10 mA max at 4.2 V) vs 5 mA limit; ~31 mAh/day at 70 % duty
+- External balancing (recommended by TI for BQ76930) is NOT fitted: see README
+- SRP/SRN filter: 100 Ohm + 100 Ohm, 100 nF differential -> tau 20 us (SCD delay options 70-400 us)
+
+## REGSRC cascode (2N7002 source follower) and REGOUT
+- Pack 15.0 V: gate 15.0-15.0 V -> REGSRC ~12.5-14.0 V [ASSUMPTION zener at ~10 uA, VGS ~2.5 V]; 2N7002 25 mW at 10.2 mA (Ptot 0.83 W at Tsp 25 C)
+- Pack 22.2 V: gate 15.5-19.1 V -> REGSRC ~13.0-18.1 V [ASSUMPTION zener at ~10 uA, VGS ~2.5 V]; 2N7002 94 mW at 10.2 mA (Ptot 0.83 W at Tsp 25 C)
+- Pack 25.2 V: gate 15.5-19.1 V -> REGSRC ~13.0-18.1 V [ASSUMPTION zener at ~10 uA, VGS ~2.5 V]; 2N7002 124 mW at 10.2 mA (Ptot 0.83 W at Tsp 25 C)
+- Bias: (25.2 - 17) V / 1 MOhm = 8 uA, also drawn in SHIP mode
+- VFETON is 10-14 V when REGSRC >= 12 V (otherwise REGSRC-2 V to REGSRC). The BZX84-C18 keeps REGSRC at or above about 12 V down to a 15 V pack (sim: 12.1 V), so the FETs see >= 10 V gate drive
+- REGOUT 3.3 V version: 3.2-3.4 V unloaded, >= 3.15 V at 10 mA; current limit 30-45 mA. Host budget 10 mA [ASSUMPTION]
+
+## FET drive
+- DSG turn-off: (2.5k internal + 100 Ohm) x Ciss 13 nF = 34 us (typ); worst RDSG_OFF 4.25k: 57 us
+- DSG turn-off: (2.5k internal + 100 Ohm) x Ciss 17 nF = 44 us (max); worst RDSG_OFF 4.25k: 74 us
+- CHG turn-off: the gate discharges through R14 100 kOhm to PACK- (D3 blocks the CHG pin): tau 1.3-1.7 ms
+- CHG disabled, charger 3.0 V above the pack: PACK- sits 3.0 V below VSS; the CHG pin's >= 750 kOhm pull-down and R14 100 kOhm divide it to VGS = 0.35 V (VGS(th) min 2.2 V)
+- CHG disabled, charger 7.2 V above the pack: PACK- sits 7.2 V below VSS; the CHG pin's >= 750 kOhm pull-down and R14 100 kOhm divide it to VGS = 0.85 V (VGS(th) min 2.2 V)
+- CHG disabled, charger 10.2 V above the pack: PACK- sits 10.2 V below VSS; the CHG pin's >= 750 kOhm pull-down and R14 100 kOhm divide it to VGS = 1.20 V (VGS(th) min 2.2 V)
+- CHG gate clamp BZX84-C15 (13.8-15.6 V) to PACK-: off at normal drive (14.0 V max - 0.6 V diode)
+- SCD turn-off at 60 A, 25.2 V: rough linear-mode energy 1/2 V I t over the threshold crossing = 67 mJ (hand estimate; ngspice gives 8 mJ at 71 A, 50 mJ at 243 A). SOA is a graph only
+
+## Pack-terminal transient
+- SMCJ26A across PACK+/PACK-: VR 26.0 V > 25.2 V; VC 42.1 V at full Ipp vs IPT012N08N5 80 V
+- The BQ76930 is on the cell side; its pins see pack-terminal transients only through the FETs
+
+## Boot and thermistor
+- Boot: SW1 connects cell 1+ (2.5-4.2 V) through 1 kOhm to TS1: above VBOOT max 1.0 V, below the 5 V pre-POR limit; 4.2 mA through the switch (B3U-1000P rated 50 mA, 12 V)
+- TS1: 103AT NTC to VSS against the internal 10k pull-up; TS2: fixed 10k to VC5X (reads as 25 C; the host must ignore TS2)
+
+## Quiescent current
+- SHIP: IC 0.6-1.8 uA + cascode bias ~8 uA -> 0.24 mAh/day
+- NORMAL: IC 40-195 uA + host load (REGOUT, 10 mA budget)

@@ -1,0 +1,20 @@
+{
+  "board": {
+    "design_settings": {}
+  },
+  "meta": {
+    "filename": "bms-6s.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "c62b37b9-fdb4-5658-bb59-748ba0b39ddc",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}

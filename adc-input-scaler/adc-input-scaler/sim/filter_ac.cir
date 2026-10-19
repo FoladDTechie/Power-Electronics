@@ -1,0 +1,17 @@
+* Small-signal response VIN -> ADC_DIV (variant A)
+.param rbyp=1m r2val=10k
+.include scaler.inc
+VIN VIN 0 DC 15 AC 1
+VEN SENSE_EN 0 0
+.control
+set wr_singlescale
+set wr_vecnames
+ac dec 50 1 100k
+let g = db(v(adc_div))
+meas ac g_dc FIND g AT=1
+let gm3 = g_dc - 3
+meas ac f3db WHEN g=gm3
+wrdata filter_ac.txt g
+quit
+.endc
+.end

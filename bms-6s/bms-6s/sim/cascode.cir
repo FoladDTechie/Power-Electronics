@@ -1,0 +1,22 @@
+* REGSRC cascode: 2N7002 source follower, BZX84-C18 gate clamp, 1 MOhm bias
+.include models.lib
+VP PACKP 0 25.2
+RBIAS PACKP GC 1meg
+DZ 0 GC BZX84C18
+MC PACKP GC REGSRC 0 N2N7002
+CREG REGSRC 0 10u
+IL REGSRC 0 10m
+.control
+set wr_singlescale
+set wr_vecnames
+dc VP 15 25.2 0.1
+let pd = (v(PACKP) - v(REGSRC)) * 0.01
+meas dc regsrc_15 FIND v(REGSRC) AT=15
+meas dc regsrc_22 FIND v(REGSRC) AT=22.2
+meas dc regsrc_25 FIND v(REGSRC) AT=25.1
+meas dc gate_25 FIND v(GC) AT=25.1
+meas dc pd_25 FIND pd AT=25.1
+wrdata cascode.txt v(REGSRC) v(GC) pd
+quit
+.endc
+.end

@@ -1,0 +1,75 @@
+# ngspice results: behavioural models (sim/models.lib)
+# plug-in assumptions: pack 15m ohm, leads 150nH, C_LOAD 2200uF, ESR 20m ohm, ESC idle 0.2 A, BEC load 32 W
+# BEC stages: worst-case L (-20 %), open loop, duty iterated to hit Vout
+
+[plug_antispark_16p8V]
+ipk = 1.67122
+ppre_pk = 27.9223
+epre = 0.422197
+t_main = 0.304797
+vds_main = 1.26127
+t_bec = 1.35143
+vgs_bec = 8.73078
+vds_bec = 0.000845008
+pmain_pk = 0.66225
+emain = 0.00818385
+vds_end = 0.00106998
+vgs_end = 11.279
+ibat_end = 2.10847
+
+[plug_direct_16p8V]
+ipk = 412.895
+
+[plug_antispark_25p2V]
+ipk = 2.51958
+ppre_pk = 63.4519
+epre = 0.831468
+t_main = 0.303778
+vds_main = 1.32782
+t_bec = 0.759149
+vgs_bec = 6.25282
+vds_bec = 0.00107739
+pmain_pk = 0.704261
+emain = 0.00749579
+vds_end = 0.000743643
+vgs_end = 11.3108
+ibat_end = 1.47152
+
+[plug_direct_25p2V]
+ipk = 619.311
+
+[bec5V_12p0V]
+vout = 4.99593
+vpp = 0.00436695
+ipp = 0.637916
+ipk = 2.31708
+iin = -0.933007
+duty = 0.465726
+eta_stage = 0.891715
+
+[bec5V_25p2V]
+vout = 4.99442
+vpp = 0.00637442
+ipp = 0.926254
+ipk = 2.46163
+iin = -0.450471
+duty = 0.224197
+eta_stage = 0.878949
+
+[bec12V_16p8V]
+vout = 12.015
+vpp = 0.00288353
+ipp = 0.310182
+ipk = 1.65662
+iin = -1.1167
+duty = 0.742316
+eta_stage = 0.961858
+
+[bec12V_25p2V]
+vout = 12.0189
+vpp = 0.00593497
+ipp = 0.605332
+ipk = 1.80488
+iin = -0.750684
+duty = 0.498242
+eta_stage = 0.954516

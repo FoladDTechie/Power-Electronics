@@ -1,0 +1,48 @@
+# ngspice results: behavioural models (sim/models.lib)
+# pack Rint 50m ohm; short loop 1 uH; DSG driver 12 V / 2.5 kOhm off at 50 us
+
+[scd_25p2V_0p3ohm]
+i_before = 71.3864
+vds_pk = 26.2984
+pq1_pk = 646.831
+eq1 = 0.00797645
+t_off = 0.0001052
+vpack_min = -1.1672
+
+[scd_25p2V_0p05ohm]
+i_before = 243.02
+vds_pk = 30.7257
+pq1_pk = 3424.48
+eq1 = 0.0499678
+t_off = 0.00010281
+vpack_min = -7.34525
+
+[scd_22p2V_0p3ohm]
+i_before = 62.8883
+vds_pk = 23.297
+pq1_pk = 516.611
+eq1 = 0.00590026
+t_off = 0.000104356
+vpack_min = -1.16579
+
+[chg_off_pack15p0V]
+vgs_chg = 1.15371
+v_packn = -10.2
+i_charge = -1.15472e-05
+
+[chg_off_pack18p0V]
+vgs_chg = 0.803108
+v_packn = -7.2
+i_charge = -8.04112e-06
+
+[chg_off_pack22p2V]
+vgs_chg = 0.314557
+v_packn = -3
+i_charge = -3.1556e-06
+
+[cascode]
+regsrc_15 = 12.1182
+regsrc_22 = 14.8553
+regsrc_25 = 14.8796
+gate_25 = 17.7316
+pd_25 = 0.102204

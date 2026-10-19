@@ -1,0 +1,20 @@
+{
+  "board": {
+    "design_settings": {}
+  },
+  "meta": {
+    "filename": "solar-charger.kicad_pro",
+    "version": 3
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "1f288c3e-42ba-5e2b-9f4f-0e9d53925c24",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}

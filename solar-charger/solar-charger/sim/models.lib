@@ -1,0 +1,6 @@
+* SPDX-License-Identifier: CERN-OHL-P-2.0
+* Behavioural models for the solar charger power-stage check. NOT vendor models.
+* Switch on-resistance = BUK9M14-40E RDS(on) max at VGS = 5 V (14 mOhm).
+.model SWQ SW(RON=0.014 ROFF=1e6 VT=0.5 VH=0.1)
+* Body-diode stand-in across the low-side switch (assumption)
+.model DBODY D(IS=1e-9 N=1.2 RS=0.02)

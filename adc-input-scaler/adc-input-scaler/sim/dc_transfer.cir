@@ -1,0 +1,26 @@
+* DC transfer, variant A (R7 fitted). Normal and R2-open fault.
+.param rbyp=1m r2val=10k
+.include scaler.inc
+VIN VIN 0 0
+VEN SENSE_EN 0 0
+.control
+set wr_singlescale
+set wr_vecnames
+dc VIN 0 100 0.1
+meas dc v_at30 FIND v(adc_div) AT=30
+meas dc v_at33p6 FIND v(adc_div) AT=33.6
+meas dc vin_at_3p5 WHEN v(adc_div)=3.5
+meas dc vpin_max MAX v(adc_out)
+meas dc i3v3_at100 FIND i(V3V3) AT=99.9
+wrdata dc_normal.txt v(adc_div) v(adc_out)
+alterparam r2val=1T
+reset
+dc VIN 0 60 0.1
+meas dc open_vdiv_at30 FIND v(adc_div) AT=30
+meas dc open_vpin_at30 FIND v(adc_out) AT=30
+meas dc open_vpin_max MAX v(adc_out)
+meas dc open_i3v3_at60 FIND i(V3V3) AT=59.9
+wrdata dc_r2open.txt v(adc_div) v(adc_out)
+quit
+.endc
+.end
